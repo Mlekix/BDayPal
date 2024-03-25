@@ -31,18 +31,21 @@ const SignUp = () => {
   return (
     <div className="auth">
       <input
+        required
         className="mr-5 p-1"
         onChange={(e) => setNewDisplayName(e.target.value)}
         type="text"
         placeholder="Your Account Name"
       />
       <input
+        required
         className="mr-5 p-1"
         onChange={(e) => setNewEmail(e.target.value)}
         type="text"
         placeholder="Your Email"
       />
       <input
+        required
         className="mr-5 p-1"
         onChange={(e) => setNewPassword(e.target.value)}
         type="password"
