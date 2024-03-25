@@ -1,51 +1,50 @@
-import { useEffect, useState } from "react";
-import { db, auth } from "../config/firebase-config";
-import { getDocs, collection, query, where } from "firebase/firestore";
+import React, { useState } from "react";
+import EditBdayForm from "./EditBdayForm";
 
-function BdayList({ bdays }) {
-  console.log(auth.currentUser.uid);
-  // List of Bdays
-  const [BdayList, setBdayList] = useState([]);
+function BdayList({ bdayList, deleteBday, editBday }) {
+  const [editBdayId, setEditBdayId] = useState(null);
 
-  // Bday Collection
-  const BdayCollectionRef = collection(db, "bdays");
-
-  const getBdayList = async () => {
-    try {
-      if (!auth.currentUser) return;
-
-      const userBdayQuery = query(
-        BdayCollectionRef,
-        where("userId", "==", auth.currentUser.uid)
-      );
-      const data = await getDocs(userBdayQuery);
-
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setBdayList(filteredData);
-    } catch (err) {
-      console.log(err);
-    }
+  const handleEditClick = (id) => {
+    setEditBdayId(id);
   };
 
-  useEffect(() => {
-    getBdayList();
-  }, [auth.currentUser]);
+  const handleCancelEdit = () => {
+    setEditBdayId(null);
+  };
 
   return (
     <div>
-      <h2 className="mt-4">List of Birthdays</h2>
+      <h2 className="mt-4">List of upcoming Birthdays</h2>
       <ul>
-        {BdayList.map((bday) => (
-          <li className="m-3" key={bday.id}>
+        {bdayList.map((bday) => (
+          <li className="m-3 border" key={bday.id}>
             <p>Name: {bday.name}</p>
             <p>Date: {bday.date}</p>
+            <button
+              className="p-1 text-red-500 border-red-500"
+              onClick={() => deleteBday(bday.id)}
+            >
+              Delete
+            </button>
+            <button
+              className="p-1 ml-2 text-blue-500 border-blue-500"
+              onClick={() => handleEditClick(bday.id)}
+            >
+              Edit
+            </button>
           </li>
         ))}
       </ul>
+      {editBdayId && (
+        <EditBdayForm
+          bday={bdayList.find((bday) => bday.id === editBdayId)}
+          onCancel={handleCancelEdit}
+          onSave={(updatedBday) => {
+            editBday(editBdayId, updatedBday);
+            handleCancelEdit();
+          }}
+        />
+      )}
     </div>
   );
 }
