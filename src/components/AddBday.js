@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { db, auth } from "../config/firebase-config";
 import { collection, addDoc } from "firebase/firestore";
 
-function AddBday({ addBday }) {
+function AddBday({ getBdayList }) {
   // New Bday
   const [newBdayName, setNewBdayName] = useState("");
   const [newBdayDate, setNewBdayDate] = useState("");
@@ -20,6 +20,7 @@ function AddBday({ addBday }) {
       });
       setNewBdayName("");
       setNewBdayDate("");
+      getBdayList();
     } catch (err) {
       console.log(err);
     }
