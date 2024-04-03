@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { db, auth } from "../config/firebase-config";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -42,7 +41,12 @@ function AddBday({ getBdayList }) {
         onChange={(e) => setNewBdayDate(e.target.value)}
       />
       <br />
-      <button onClick={newBdayRecord}>Add</button>
+      <button
+        className="mt-1 p-1 text-green-500 border border-green-500 rounded-md"
+        onClick={newBdayRecord}
+      >
+        Add
+      </button>
     </div>
   );
 }

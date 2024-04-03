@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { auth, googleProvider } from "../config/firebase-config";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
   const signIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(
+        auth,
+        formik.values.email,
+        formik.values.password
+      );
       navigate("/main");
     } catch (err) {
       console.error(err);
@@ -27,19 +29,32 @@ const SignIn = () => {
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+  });
+
   return (
     <div className="auth m-10">
       <input
         className="mr-5 p-1 border-2 border-gray-300"
-        onChange={(e) => setEmail(e.target.value)}
-        type="text"
+        id="email"
+        name="email"
+        type="email"
         placeholder="Your Email"
+        onChange={formik.handleChange}
+        value={formik.values.email}
       />
       <input
         className="mr-5 p-1 border-2 border-gray-300"
-        onChange={(e) => setPassword(e.target.value)}
+        id="password"
+        name="password"
         type="password"
         placeholder="Your Password"
+        onChange={formik.handleChange}
+        value={formik.values.password}
       />
       <button
         className="mr-5 p-1 px-2 hover:outline outline-offset-2 outline-2 border-2 border-gra"
