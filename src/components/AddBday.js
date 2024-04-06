@@ -1,44 +1,66 @@
-import React, { useState } from "react";
+import React from "react";
 import { db, auth } from "../config/firebase-config";
 import { collection, addDoc } from "firebase/firestore";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 function AddBday({ getBdayList }) {
-  // New Bday
-  const [newBdayName, setNewBdayName] = useState("");
-  const [newBdayDate, setNewBdayDate] = useState("");
-
   // Bday Collection
   const BdayCollectionRef = collection(db, "bdays");
 
+  const addBdaySchema = Yup.object().shape({
+    name: Yup.string()
+      .min(3, "Must be at least 3 characters")
+      .max(15, "Must be 15 characters or less")
+      .required("Required"),
+    date: Yup.date().required("Required"),
+  });
+
   const newBdayRecord = async () => {
     try {
-      await addDoc(BdayCollectionRef, {
-        userId: auth.currentUser.uid,
-        name: newBdayName,
-        date: newBdayDate,
-      });
-      setNewBdayName("");
-      setNewBdayDate("");
-      getBdayList();
+      if (
+        formik.isValid &&
+        formik.values.name.trim() !== "" &&
+        formik.values.date !== ""
+      ) {
+        await addDoc(BdayCollectionRef, {
+          userId: auth.currentUser.uid,
+          name: formik.values.name,
+          date: formik.values.date,
+        });
+        formik.resetForm();
+        getBdayList();
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      date: "",
+    },
+    validationSchema: addBdaySchema,
+    onSubmit: newBdayRecord,
+  });
+
   return (
     <div>
       <input
-        required
+        id="name"
+        name="name"
         type="text"
-        value={newBdayName}
-        onChange={(e) => setNewBdayName(e.target.value)}
-        placeholder="Name"
+        placeholder="Name of Pal"
+        value={formik.values.name}
+        onChange={formik.handleChange}
       />
       <input
-        required
+        id="date"
+        name="date"
         type="date"
-        value={newBdayDate}
-        onChange={(e) => setNewBdayDate(e.target.value)}
+        value={formik.values.date}
+        onChange={formik.handleChange}
       />
       <br />
       <button

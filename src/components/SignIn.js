@@ -55,6 +55,12 @@ const SignIn = () => {
         placeholder="Your Password"
         onChange={formik.handleChange}
         value={formik.values.password}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === "Return") {
+            event.preventDefault();
+            signIn();
+          }
+        }}
       />
       <button
         className="mr-5 p-1 px-2 hover:outline outline-offset-2 outline-2 border-2 border-gra"

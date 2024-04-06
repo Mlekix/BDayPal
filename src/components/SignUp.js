@@ -7,7 +7,7 @@ import * as Yup from "yup";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const SignUpSchema = Yup.object().shape({
+  const signUpSchema = Yup.object().shape({
     name: Yup.string()
       .min(5, "Must be at least 5 characters")
       .max(15, "Must be 15 characters or less")
@@ -42,7 +42,7 @@ const SignUp = () => {
       email: "",
       password: "",
     },
-    validationSchema: SignUpSchema,
+    validationSchema: signUpSchema,
     onSubmit: signUp,
   });
 
@@ -57,9 +57,6 @@ const SignUp = () => {
         onChange={formik.handleChange}
         value={formik.values.name}
       />
-      {formik.touched.name && formik.errors.name ? (
-        <div className="error">{formik.errors.name}</div>
-      ) : null}
       <input
         className="p-1"
         id="email"
@@ -69,9 +66,6 @@ const SignUp = () => {
         onChange={formik.handleChange}
         value={formik.values.email}
       />
-      {formik.touched.email && formik.errors.email ? (
-        <div className="error">{formik.errors.email}</div>
-      ) : null}
       <input
         className="p-1"
         id="password"
@@ -80,10 +74,13 @@ const SignUp = () => {
         placeholder="Your Password"
         onChange={formik.handleChange}
         value={formik.values.password}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === "Return") {
+            event.preventDefault();
+            formik.handleSubmit();
+          }
+        }}
       />
-      {formik.touched.password && formik.errors.password ? (
-        <div className="error">{formik.errors.password}</div>
-      ) : null}
       <button className="p-1 px-2" onClick={formik.handleSubmit}>
         Sign Up
       </button>
