@@ -4,7 +4,10 @@ import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 function LogOut() {
+  // Route after Sign Out
   const navigate = useNavigate();
+
+  // Sign Out
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -17,7 +20,10 @@ function LogOut() {
 
   return (
     <div>
-      <button className="m-5 p-1 px-2" onClick={handleLogout}>
+      <button
+        className="m-5 p-1 px-2 border border-red-500 text-red-500 rounded-md"
+        onClick={handleLogout}
+      >
         Logout
       </button>
     </div>

@@ -3,38 +3,50 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { showToastError } from "../config/toast-config";
 
 const SignUp = () => {
+  // Route after Sign Up
   const navigate = useNavigate();
 
-  const signUpSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(5, "Must be at least 5 characters")
-      .max(15, "Must be 15 characters or less")
-      .required("Required"),
-    email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string()
-      .min(6, "Must be at least 6 characters")
-      .required("Required"),
-  });
-
+  // Sign Up with Email and Password
   const signUp = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        formik.values.email,
-        formik.values.password
-      );
+      if (formik.isValid) {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formik.values.email,
+          formik.values.password
+        );
 
-      await updateProfile(userCredential.user, {
-        displayName: formik.values.name,
-      });
+        await updateProfile(userCredential.user, {
+          displayName: formik.values.name,
+        });
 
-      navigate("/main");
+        navigate("/main");
+      } else {
+        showToastError(
+          formik.errors.name || formik.errors.email || formik.errors.password
+        );
+      }
     } catch (err) {
       console.error(err);
     }
   };
+
+  // Formik Schema for Sign Up
+  const signUpSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(5, "Must be at least 5 characters")
+      .max(15, "Must be 15 characters or less")
+      .required("Please enter a name"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Please enter an email"),
+    password: Yup.string()
+      .min(6, "Must be at least 6 characters")
+      .required("Please enter a password"),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -81,7 +93,7 @@ const SignUp = () => {
           }
         }}
       />
-      <button className="p-1 px-2" onClick={formik.handleSubmit}>
+      <button className="p-1 px-2" type="submit" onClick={formik.handleSubmit}>
         Sign Up
       </button>
     </div>

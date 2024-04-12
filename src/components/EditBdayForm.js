@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { showToastInfo } from "../config/toast-config";
 
 function EditBdayForm({ bday, onCancel, onSave }) {
+  // Edit Bday form
   const [editedBday, setEditedBday] = useState({ ...bday });
 
   const handleChange = (e) => {
@@ -14,6 +16,7 @@ function EditBdayForm({ bday, onCancel, onSave }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(editedBday);
+    showToastInfo("Birthday updated successfully!");
   };
 
   return (

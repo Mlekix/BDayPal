@@ -10,14 +10,16 @@ function StartPage() {
       <NavBar />
       <h1 className="">Welcome to BDayPal!</h1>
       <h1>*WIP*</h1>
-      <h3>Never forgot about Bday of your Pals!</h3>
-      <p>Please sign in or sign up.</p>
+      <h2>Never forgot about Bday of your Pals!</h2>
+      <h3>Please sign in or sign up.</h3>
       <SignIn />
       <h3>Forgot a passowrd?</h3>
       <ResetPassword />
-      <h3>Dont have account?</h3>
+      <h3>Don't have account?</h3>
       <Link to="/signup">
-        <button>SignUp!</button>
+        <button className="p-1.5 m-5 mt-1 border-2 border-grey-600">
+          SignUp!
+        </button>
       </Link>
     </div>
   );

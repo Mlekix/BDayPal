@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EditBdayForm from "./EditBdayForm";
 
 function BdayList({ bdayList, deleteBday, editBday }) {
+  // Edit Bday
   const [editBdayId, setEditBdayId] = useState(null);
 
   const handleEditClick = (id) => {
@@ -18,8 +19,8 @@ function BdayList({ bdayList, deleteBday, editBday }) {
       <ul>
         {bdayList.map((bday) => (
           <li className="m-3 border" key={bday.id}>
-            <p>Name: {bday.name}</p>
-            <p>Date: {bday.date}</p>
+            <p>Pal: {bday.name}</p>
+            <p>Have birtday: {bday.date}</p>
             <button
               className="p-1 text-red-500 border-red-500"
               onClick={() => deleteBday(bday.id)}
