@@ -12,18 +12,15 @@ const SignIn = () => {
   // Sign In with Email and Password
   const signIn = async () => {
     try {
-      if (formik.isValid) {
-        await signInWithEmailAndPassword(
-          auth,
-          formik.values.email,
-          formik.values.password
-        );
-        navigate("/main");
-      } else {
-        showToastError("Invalid Email or Password");
-      }
+      await signInWithEmailAndPassword(
+        auth,
+        formik.values.email,
+        formik.values.password
+      );
+      navigate("/main");
     } catch (err) {
       console.error(err);
+      showToastError("Invalid Email or Password");
     }
   };
 

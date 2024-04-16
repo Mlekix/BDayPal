@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { showToastInfo } from "../config/toast-config";
 
 function EditBdayForm({ bday, onCancel, onSave }) {
-  // Edit Bday form
   const [editedBday, setEditedBday] = useState({ ...bday });
+  const [showPartyDetails, setShowPartyDetails] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,6 +43,53 @@ function EditBdayForm({ bday, onCancel, onSave }) {
               onChange={handleChange}
               className="w-full border rounded py-2 px-3"
             />
+          </div>
+          {showPartyDetails && (
+            <>
+              <div className="mb-4">
+                <label className="block mb-1">Party Location:</label>
+                <input
+                  type="text"
+                  name="partyWhere"
+                  value={editedBday.partyWhere}
+                  onChange={handleChange}
+                  className="w-full border rounded py-2 px-3"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">Party Date:</label>
+                <input
+                  type="date"
+                  name="partyWhen"
+                  value={editedBday.partyWhen}
+                  onChange={handleChange}
+                  className="w-full border rounded py-2 px-3"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-1">Birthday Gift:</label>
+                <input
+                  type="text"
+                  name="gift"
+                  value={editedBday.gift}
+                  onChange={handleChange}
+                  className="w-full border rounded py-2 px-3"
+                />
+              </div>
+            </>
+          )}
+          {/* Checkbox to toggle party details */}
+          <div className="mb-4">
+            <label className="block mb-1">
+              <input
+                type="checkbox"
+                checked={showPartyDetails}
+                name="hasParty"
+                value={editedBday.hasParty}
+                onChange={() => setShowPartyDetails(!showPartyDetails)}
+              />{" "}
+              Include Party Details
+            </label>
           </div>
           <div className="flex justify-end">
             <button
