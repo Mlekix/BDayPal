@@ -14,14 +14,14 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+import { showToastInfo } from "../config/toast-config";
 
-// MainPage component
 function MainPage() {
   const [bdayList, setBdayList] = useState([]);
   const [currentUserName, setCurrentUserName] = useState(null);
   const [editBdayData, setEditBdayData] = useState(null);
 
-  // Bday Collection Reference
+  // Bday Collection
   const BdayCollectionRef = collection(db, "bdays");
 
   // Check if user is logged in
@@ -64,6 +64,7 @@ function MainPage() {
     const bdayRef = doc(db, "bdays", id);
     await deleteDoc(bdayRef);
     getBdayList();
+    showToastInfo("Birthday deleted successfully!");
   };
 
   // Edit Bday

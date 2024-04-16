@@ -3,21 +3,30 @@ import { getAuth } from "firebase/auth";
 import { sendPasswordResetEmail } from "firebase/auth";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { showToastSuccess, showToastError } from "../config/toast-config";
 
 const ResetPassword = () => {
+  // Reset Password with auth
   const auth = getAuth();
 
   const triggerResetEmail = async () => {
     try {
-      await sendPasswordResetEmail(auth, formik.values.email);
-      console.log("Password reset email sent");
+      if (formik.isValid) {
+        await sendPasswordResetEmail(auth, formik.values.email);
+        showToastSuccess("Password Reset Email Sent");
+      } else {
+        showToastError(formik.errors.email);
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
+  // Formik Schema for Reset Password
   const resetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email address").required("Required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Please enter an email"),
   });
 
   const formik = useFormik({
@@ -29,9 +38,9 @@ const ResetPassword = () => {
   });
 
   return (
-    <div>
+    <div className="m-5 mt-1">
       <input
-        className="p-1"
+        className="min-w-40 p-1.5 mr-2 border border-gray-300 rounded-md"
         id="reset-email"
         name="email"
         type="email"
@@ -45,7 +54,12 @@ const ResetPassword = () => {
           }
         }}
       />
-      <button onClick={triggerResetEmail}>Reset password</button>
+      <button
+        className="p-1.5 border border-gray-300 rounded-md"
+        onClick={triggerResetEmail}
+      >
+        Reset password
+      </button>
     </div>
   );
 };
