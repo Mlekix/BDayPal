@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import ShowMore from "./ShowMore";
 import EditBdayForm from "./EditBdayForm";
 
 function BdayList({ bdayList, deleteBday, editBday }) {
   const [editBdayId, setEditBdayId] = useState(null);
+  const [showPartyDetails, setShowPartyDetails] = useState(false);
+  const [selectedBday, setSelectedBday] = useState(null);
 
   const handleEditClick = (id) => {
     setEditBdayId(id);
@@ -12,8 +15,13 @@ function BdayList({ bdayList, deleteBday, editBday }) {
     setEditBdayId(null);
   };
 
-  const handleListItemClick = (bdayId) => {
-    setEditBdayId(bdayId);
+  const handleListItemClick = (bday) => {
+    setSelectedBday(bday);
+    setShowPartyDetails(true);
+  };
+
+  const handleShowMoreClose = () => {
+    setShowPartyDetails(false);
   };
 
   return (
@@ -24,15 +32,10 @@ function BdayList({ bdayList, deleteBday, editBday }) {
           <li
             className="m-3 border"
             key={bday.id}
-            onClick={() => handleListItemClick(bday.id)}
+            onClick={() => handleListItemClick(bday)}
           >
             <p>Pal: {bday.name}</p>
             <p>Have birthday: {bday.date}</p>
-            {bday.hasParty && (
-              <p>
-                Party: {bday.partyWhere} on {bday.partyWhen}
-              </p>
-            )}
             <button
               className="p-1 text-red-500 border-red-500"
               onClick={(e) => {
@@ -54,6 +57,9 @@ function BdayList({ bdayList, deleteBday, editBday }) {
           </li>
         ))}
       </ul>
+      {showPartyDetails && (
+        <ShowMore bday={selectedBday} onClose={handleShowMoreClose} />
+      )}
       {editBdayId !== null && (
         <div className="popup">
           <div className="popup-content">
