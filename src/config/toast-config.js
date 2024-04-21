@@ -1,9 +1,6 @@
-// ToastConfig.js
-
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Configuring the toast options
 const toastOptions = {
   position: "top-right",
   autoClose: 4000,
@@ -14,7 +11,6 @@ const toastOptions = {
   progress: undefined,
 };
 
-// Exporting different toast variants
 export const showToastSuccess = (message) => {
   toast.success(message, toastOptions);
 };
