@@ -1,10 +1,10 @@
-// Import necessary libraries
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../config/firebase-config";
 import AddBday from "../components/AddBday";
 import BdayList from "../components/BdayList";
 import LogOut from "../components/LogOut";
 import EditBdayForm from "../components/EditBdayForm";
+import TodayBdayList from "../components/TodayBdayList";
 import {
   getDocs,
   collection,
@@ -20,6 +20,9 @@ function MainPage() {
   const [bdayList, setBdayList] = useState([]);
   const [currentUserName, setCurrentUserName] = useState(null);
   const [editBdayData, setEditBdayData] = useState(null);
+  const [sortBy, setSortBy] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
+  const [nameFilter, setNameFilter] = useState("");
 
   // Bday Collection
   const BdayCollectionRef = collection(db, "bdays");
@@ -74,22 +77,94 @@ function MainPage() {
     getBdayList();
   };
 
+  // Sort Bday List
+  const sortBdayList = (list) => {
+    if (!sortBy) return list;
+
+    const sortedList = [...list].sort((a, b) => {
+      const valueA = a[sortBy];
+      const valueB = b[sortBy];
+
+      if (valueA < valueB) {
+        return sortOrder === "asc" ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return sortOrder === "asc" ? 1 : -1;
+      }
+      return 0;
+    });
+
+    return sortedList;
+  };
+
+  // Handle sort button click
+  const handleSort = (sortByField) => {
+    if (sortByField === sortBy) {
+      // Toggle sort order if sorting by the same field
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      // Set new sort field and reset sort order to ascending
+      setSortBy(sortByField);
+      setSortOrder("asc");
+    }
+  };
+
+  // Filter Bday List by Name
+  const filteredBdayList = bdayList.filter((bday) =>
+    bday.name.toLowerCase().includes(nameFilter.toLowerCase())
+  );
+
   return (
-    <div>
+    <div className="container mx-auto py-8 px-4">
       <LogOut />
       {currentUserName ? (
-        <h1>Hello {currentUserName}!</h1>
+        <h1 className="text-3xl font-bold mb-4">Hello {currentUserName}!</h1>
       ) : (
         <h1>Loading...</h1>
       )}
       <AddBday getBdayList={getBdayList} />
-      <BdayList
-        bdayList={bdayList}
-        deleteBday={deleteBday}
-        editBday={(id, data) => {
-          setEditBdayData({ id, ...data });
-        }}
-      />
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex space-x-4">
+          <button
+            onClick={() => handleSort("date")}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Sort by Date of Birth{" "}
+            {sortBy === "date" && sortOrder === "asc" && "▲"}
+            {sortBy === "date" && sortOrder === "desc" && "▼"}
+          </button>
+          <button
+            onClick={() => handleSort("partyWhen")}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+          >
+            Sort by Party Date{" "}
+            {sortBy === "partyWhen" && sortOrder === "asc" && "▲"}
+            {sortBy === "partyWhen" && sortOrder === "desc" && "▼"}
+          </button>
+        </div>
+        <input
+          type="text"
+          placeholder="Filter by name..."
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
+      </div>
+      <div className="">
+        <TodayBdayList bdayList={filteredBdayList} />
+      </div>
+      <br />
+      <div className="">
+        <div className="">
+          <BdayList
+            bdayList={sortBdayList(filteredBdayList)}
+            deleteBday={deleteBday}
+            editBday={(id, data) => {
+              setEditBdayData({ id, ...data });
+            }}
+          />
+        </div>
+      </div>
       {editBdayData && (
         <EditBdayForm
           bday={editBdayData}
