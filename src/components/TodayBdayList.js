@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDateString } from "./BdayList";
 
 function TodayBdayList({ bdayList }) {
   // Filter birthdays that match today's date
@@ -21,7 +22,7 @@ function TodayBdayList({ bdayList }) {
               <h3>{bday.name}</h3>
               {bday.hasParty && (
                 <div>
-                  <p>Party Date: {bday.partyWhen}</p>
+                  <p>Party Date: {formatDateString(bday.partyWhen)}</p>
                   <p>Party Location: {bday.partyWhere}</p>
                   <p>Birthday Gift: {bday.gift}</p>
                 </div>
