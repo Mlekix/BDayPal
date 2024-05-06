@@ -14,7 +14,7 @@ function ShowMore({ bday, onClose }) {
           onClick={onClose}
           className="bg-gray-300 text-gray-800 px-4 py-2 rounded mt-4"
         >
-          Close
+          Got It!
         </button>
       </div>
     </div>

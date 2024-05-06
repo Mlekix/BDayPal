@@ -4,6 +4,7 @@ import AddBday from "../components/AddBday";
 import BdayList from "../components/BdayList";
 import LogOut from "../components/LogOut";
 import EditBdayForm from "../components/EditBdayForm";
+import TodayBdayList from "../components/TodayBdayList";
 import {
   getDocs,
   collection,
@@ -20,7 +21,8 @@ function MainPage() {
   const [currentUserName, setCurrentUserName] = useState(null);
   const [editBdayData, setEditBdayData] = useState(null);
   const [sortBy, setSortBy] = useState(null);
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" or "desc"
+  const [nameFilter, setNameFilter] = useState("");
 
   // Bday Collection
   const BdayCollectionRef = collection(db, "bdays");
@@ -98,12 +100,19 @@ function MainPage() {
   // Handle sort button click
   const handleSort = (sortByField) => {
     if (sortByField === sortBy) {
+      // Toggle sort order if sorting by the same field
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
+      // Set new sort field and reset sort order to ascending
       setSortBy(sortByField);
       setSortOrder("asc");
     }
   };
+
+  // Filter Bday List by Name
+  const filteredBdayList = bdayList.filter((bday) =>
+    bday.name.toLowerCase().includes(nameFilter.toLowerCase())
+  );
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -133,14 +142,29 @@ function MainPage() {
             {sortBy === "partyWhen" && sortOrder === "desc" && "▼"}
           </button>
         </div>
+        <input
+          type="text"
+          placeholder="Filter by name..."
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+        />
       </div>
-      <BdayList
-        bdayList={sortBdayList(bdayList)}
-        deleteBday={deleteBday}
-        editBday={(id, data) => {
-          setEditBdayData({ id, ...data });
-        }}
-      />
+      <div className="">
+        <TodayBdayList bdayList={filteredBdayList} />
+      </div>
+      <br />
+      <div className="">
+        <div className="">
+          <BdayList
+            bdayList={sortBdayList(filteredBdayList)}
+            deleteBday={deleteBday}
+            editBday={(id, data) => {
+              setEditBdayData({ id, ...data });
+            }}
+          />
+        </div>
+      </div>
       {editBdayData && (
         <EditBdayForm
           bday={editBdayData}
