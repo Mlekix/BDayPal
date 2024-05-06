@@ -1,4 +1,5 @@
 import React from "react";
+import { formatDateString } from "./BdayList";
 
 function ShowMore({ bday, onClose }) {
   return (
@@ -6,9 +7,9 @@ function ShowMore({ bday, onClose }) {
       <div className="bg-white p-8 rounded-lg max-w-md">
         <h2 className="text-xl font-semibold mb-4">Birthday Details</h2>
         <p>Pal: {bday.name}</p>
-        <p>Have birthday: {bday.date}</p>
+        <p>Have birthday: {formatDateString(bday.date)}</p>
         <p>Party Location: {bday.partyWhere}</p>
-        <p>Party Date: {bday.partyWhen}</p>
+        <p>Party Date: {formatDateString(bday.partyWhen)}</p>
         <p>Birthday Gift: {bday.gift}</p>
         <button
           onClick={onClose}
