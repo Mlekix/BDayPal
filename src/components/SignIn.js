@@ -69,13 +69,13 @@ const SignIn = () => {
         }}
       />
       <button
-        className="mr-5 p-1 px-2 hover:outline outline-offset-2 outline-2 border-2 border-gra"
+        className="mr-5 p-1 px-2 outline-offset-2 outline-2 border-2 hover:border-blue-600"
         onClick={signIn}
       >
         Sign In
       </button>
       <button
-        className="mr-5 p-1 px-2 hover:outline outline-offset-2 outline-2 border-2 border-gra"
+        className="mr-5 p-1 px-2 outline-offset-2 outline-2 border-2 hover:border-blue-600"
         onClick={signInWithGoogle}
       >
         Sign In with Google
