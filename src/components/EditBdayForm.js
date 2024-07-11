@@ -86,7 +86,7 @@ function EditBdayForm({ bday, onCancel, onSave }) {
                 checked={showPartyDetails}
                 name="hasParty"
                 value={editedBday.hasParty}
-                onChange={() => setShowPartyDetails(!showPartyDetails)}
+                onChange={() => setShowPartyDetails((prev) => !prev)}
               />{" "}
               Include Party Details
             </label>

@@ -55,7 +55,7 @@ const ResetPassword = () => {
         }}
       />
       <button
-        className="p-1.5 border border-gray-300 rounded-md"
+        className="mr-5 p-1 px-2 outline-offset-2 outline-2 border-2 hover:border-blue-600"
         onClick={triggerResetEmail}
       >
         Reset password

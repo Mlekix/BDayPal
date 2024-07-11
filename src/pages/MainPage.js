@@ -115,7 +115,7 @@ function MainPage() {
   );
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto py-8 px-4 border border-grey-300">
       <LogOut />
       {currentUserName ? (
         <h1 className="text-3xl font-bold mb-4">Hello {currentUserName}!</h1>
